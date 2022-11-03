@@ -23,21 +23,23 @@ export default class Producto {
         // return prod;
     }
 
-    listar(id) {
+    async listar(id) {
         try {
-            
-        } catch (error) {
-            
+            await this.mongodb(this.url);
+            return await ProductoModel.findById(id);
+        } catch (err) {
+            console.log(err);
         }
         // let producto = Producto.productos.find((prod) => prod.id == id);
         // return producto || {error: "producto no encontrado"}
     }
 
-    listarAll() {
+    async listarAll() {
         try {
-            
-        } catch (error) {
-            
+            await this.mongodb(this.url);
+            return await ProductoModel.find();
+        } catch (err) {
+            console.log(err);
         }
         // return Producto.productos.length
         // ? Producto.productos
@@ -45,11 +47,12 @@ export default class Producto {
     }
 
 
-    actualizar(prod, id) {
+    async actualizar(prod, id) {
         try {
-            
-        } catch (error) {
-            
+            await this.mongodb(this.url);
+            return await ProductoModel.findByIdAndUpdate(id, prod);
+        } catch (err) {
+            console.log(err);
         }
         // const productId = Producto.productos.filter(data => data.id === parseInt(id));
         // if (productId.length > 0) {
@@ -65,11 +68,12 @@ export default class Producto {
         // }
     }
 
-    borrar(id) {
+    async borrar(id) {
         try {
-            
-        } catch (error) {
-            
+            await this.mongodb(this.url);
+            return await ProductoModel.findByIdAndDelete(id);
+        } catch (err) {
+            console.log(err);
         }
         // let index = Producto.productos.findIndex((prod) => prod.id == id);
         // return Producto.productos.splice(index, 1);
