@@ -1,51 +1,77 @@
-import Producto from "./producto.class.js";
+import mongoose from "mongoose";
+import Producto from "./producto.dao.class.js";
+import CarritoModel from "../models/CarritoModel.js";
 
 export default class Carrito {
     constructor() {
         this.producto = new Producto();
-        this.carritos = [];
-        this.id = 1;
+        this.url = 'mongodb+srv://omarurregodev:oturrego1234@cluster0.bwe1f85.mongodb.net/?retryWrites=true&w=majority'
+        this.mongodb = mongoose.connect;
     }
 
-    listar(id) {
-        let prod = this.carritos.find((carr) => carr.id == id);
-        return prod || {error: "carrito no encontrado"};
-    }
-
-    listarAll() {
-        return this.carritos.length
-        ? this.carritos
-        : {error: "no hay carritos cargados"}
-    }
-
-    crearCarrito() {
-        const carr = {
-            id: this.id++, 
-            timeStamp: Date.now(), 
-            productos: []
+    async listar(id) {
+        try {
+            await this.mongodb(this.url);
+            console.log(id);
+            return await CarritoModel.findById(id);
+        } catch (err) {
+            console.log(err);
         }
-        this.carritos.push(carr);
-        return carr;
     }
 
-    guardarProductoEnCarrito(idPrd, idCarrito) {
+    async listarAll() {
+        try {
+            await this.mongodb(this.url);
+            return await CarritoModel.find();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async crearCarrito() {
+        try {
+            await this.mongodb(this.url);
+            const newCarrito = new CarritoModel();
+            return await newCarrito.save();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async guardarProductoEnCarrito(idPrd, idCarrito) {
         console.log(idPrd);
-        const producto = this.producto.listar(idPrd);
-        this.carritos.forEach((carro) => {
-            carro.id == idCarrito ? carro.productos.push(producto) : null;
-        });
-        return this.carritos;
+        try {
+            const product = await this.producto.listar(idPrd);
+            const carr = await this.listar(idCarrito);
+            if (carr === null) {
+                return null;
+            }
+            let existingProd = carr.productos.find((x) => x.producto == product.id);
+            if (existingProd) {
+            let filter = { "productos._id": existingProd._id };
+            let update = {
+                $set: {
+                "productos.$.stock": existingProd.stock + product.stock,
+                },
+            };
+            let options = { new: true };
+            return await CarritoModel.findOneAndUpdate(filter, update, options);
+            } else {
+            carr.productos.push({ producto: product.id, stock: product.stock });
+            return await CarritoModel.findOneAndUpdate(idCarrito, carr);
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    actualizar(carr, id) {
-        carr.id = Number(id);
-        let index = this.carritos.findIndex((carr) => carr.id == id);
-        this.productos.splice(index, 1, carr);
-    }
-
-    borrar(id) {
-        let index = this.carritos.findIndex((carr) => carr.id == id);
-        return this.carritos.splice(index, 1);
+    async borrar(id) {
+        try {
+            await this.mongodb(this.url);
+            return await CarritoModel.findByIdAndDelete(id)
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     eliminarProductoEnCarrito(idPrd, idCarrito) {

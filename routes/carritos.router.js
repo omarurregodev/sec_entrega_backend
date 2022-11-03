@@ -1,32 +1,32 @@
 import express from "express";
-import Carrito from "../clases/carrito.class.js";
+import Carrito from "../DAOs/carrito.dao.class.js";
 
 const router = express.Router();
 
 const carrito = new Carrito();
 
-router.post("/", (req, res) => {
-    const carritoCreado = carrito.crearCarrito();
+router.post("/", async (req, res) => {
+    const carritoCreado = await carrito.crearCarrito();
     res.send(carritoCreado);
 });
 
-router.delete("/:id", (req, res) => {
-    const carritoBorrado = carrito.borrar(req.params.id);
+router.delete("/:id", async (req, res) => {
+    const carritoBorrado = await carrito.borrar(req.params.id);
     res.send(carritoBorrado);
 });
 
-router.get("/", (req, res) => {
-    const listaCarritos = carrito.listarAll();
+router.get("/", async (req, res) => {
+    const listaCarritos = await carrito.listarAll();
     res.send(listaCarritos);
 });
 
-router.get("/:id/productos", (req, res) => {
-    const listaCarro = carrito.listar(req.params.id);
+router.get("/:id/productos", async (req, res) => {
+    const listaCarro = await carrito.listar(req.params.id);
     res.send(listaCarro);
 });
 
-router.post("/:id/productos/:idPrd", (req, res) => {
-    const modCarrito = carrito.guardarProductoEnCarrito(
+router.post("/:id/productos/:idPrd", async (req, res) => {
+    const modCarrito = await carrito.guardarProductoEnCarrito(
         req.params.idPrd,
         req.params.id
     );
