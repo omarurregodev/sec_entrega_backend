@@ -1,7 +1,26 @@
+import mongoose from "mongoose";
+import ProductoModel from "../models/ProductoModel.js";
+
 export default class Producto {
     // static productos = [];
     constructor() {
+        this.url = 'mongodb+srv://omarurregodev:oturrego1234@cluster0.bwe1f85.mongodb.net/?retryWrites=true&w=majority'
+        this.mongodb = mongoose.connect;
         // this.id = 0;
+    }
+    
+    async guardar(prod) {
+        try {
+            await this.mongodb(this.url);
+            const newProduct = new ProductoModel(prod);
+            return await newProduct.save();
+        } catch (err) {
+            console.log(err);
+        }
+        // prod.id = ++this.id;
+        // prod.timeStamp = Date.now();
+        // Producto.productos.push(prod);
+        // return prod;
     }
 
     listar(id) {
@@ -25,17 +44,6 @@ export default class Producto {
         // : {error: "no hay productos cargados"}
     }
 
-    guardar(prod) {
-        try {
-            
-        } catch (error) {
-            
-        }
-        // prod.id = ++this.id;
-        // prod.timeStamp = Date.now();
-        // Producto.productos.push(prod);
-        // return prod;
-    }
 
     actualizar(prod, id) {
         try {

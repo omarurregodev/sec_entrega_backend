@@ -1,5 +1,5 @@
 import express from "express";
-import Producto from "../clases/producto.class.js";
+import Producto from "../DAOs/producto.dao.class.js";
 
 const router = express.Router();
 
@@ -12,9 +12,9 @@ function validarAdmin(req, res, next) {
     }
 }
 
-router.post("/", validarAdmin, (req, res) => {
+router.post("/", validarAdmin, async (req, res) => {
     console.log(req.body);
-    const productoCreado = producto.guardar(req.body);
+    const productoCreado = await producto.guardar(req.body);
     res.send(productoCreado);
 });
 
