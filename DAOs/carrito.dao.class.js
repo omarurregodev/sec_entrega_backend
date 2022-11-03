@@ -12,7 +12,6 @@ export default class Carrito {
     async listar(id) {
         try {
             await this.mongodb(this.url);
-            console.log(id);
             return await CarritoModel.findById(id);
         } catch (err) {
             console.log(err);
@@ -39,7 +38,6 @@ export default class Carrito {
     }
 
     async guardarProductoEnCarrito(idPrd, idCarrito) {
-        console.log(idPrd);
         try {
             const product = await this.producto.listar(idPrd);
             const carr = await this.listar(idCarrito);
@@ -58,7 +56,8 @@ export default class Carrito {
             return await CarritoModel.findOneAndUpdate(filter, update, options);
             } else {
             carr.productos.push({ producto: product.id, stock: product.stock });
-            return await CarritoModel.findOneAndUpdate(idCarrito, carr);
+            let result = await CarritoModel.findByIdAndUpdate(idCarrito, carr);
+            return result;
             }
         } catch (err) {
             console.log(err);
@@ -74,7 +73,24 @@ export default class Carrito {
         }
     }
 
-    eliminarProductoEnCarrito(idPrd, idCarrito) {
+    async eliminarProductoEnCarrito(idPrd, idCarrito) {
+        try {
+            const carr = await this.listar(idCarrito);
+            if (carr === null) {
+                return null;
+            }
+            let existingProd = carr.productos.find((x) => x.producto == idPrd);
+            if (existingProd === null) {
+            return null;
+            }
+            return await CarritoModel.findByIdAndUpdate(idCarrito, {
+            $pull: {
+                productos: { _id: existingProd._id },
+            },
+            });
+        } catch (err) {
+            console.log(err);
+        }
         const productosCarrito = this.carritos.find((carr) => carr.id == idCarrito);
         let index = productosCarrito.productos.findIndex((prod) => prod.id == idPrd);
         return productosCarrito.productos.splice(index, 1);

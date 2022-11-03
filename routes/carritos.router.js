@@ -33,8 +33,8 @@ router.post("/:id/productos/:idPrd", async (req, res) => {
     res.send(modCarrito);
 });
 
-router.delete("/:id/productos/:idPrd", (req, res) => {
-    const deleteProdCarrito = carrito.eliminarProductoEnCarrito(
+router.delete("/:id/productos/:idPrd", async (req, res) => {
+    const deleteProdCarrito = await carrito.eliminarProductoEnCarrito(
         req.params.idPrd,
         req.params.id
     );
