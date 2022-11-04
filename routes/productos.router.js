@@ -8,7 +8,7 @@ function validarAdmin(req, res, next) {
     if(req.query.admin){
         next();
     } else {
-        res.send("Usted no tiene acceso")
+        res.status(403).json({error: 'El usuario no tiene acceso.'})
     }
 }
 

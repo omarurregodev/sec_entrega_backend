@@ -14,7 +14,7 @@ export default class Producto {
             const newProduct = new ProductoModel(prod);
             return await newProduct.save();
         } catch (err) {
-            console.log(err);
+            return {error: "No se pudo guardar el producto."}
         }
     }
 
@@ -23,7 +23,7 @@ export default class Producto {
             await this.mongodb(this.url);
             return await ProductoModel.findById(id);
         } catch (err) {
-            console.log(err);
+            return {error: "No se puede listar el producto."}
         }
     }
 
@@ -32,7 +32,7 @@ export default class Producto {
             await this.mongodb(this.url);
             return await ProductoModel.find();
         } catch (err) {
-            console.log(err);
+            return {error: "No se pueden listar los productos."}
         }
     }
 
@@ -40,9 +40,9 @@ export default class Producto {
     async actualizar(prod, id) {
         try {
             await this.mongodb(this.url);
-            return await ProductoModel.findByIdAndUpdate(id, prod);
+            return await ProductoModel.findByIdAndUpdate(id, prod,{ new: true });
         } catch (err) {
-            console.log(err);
+            return {error: "El producto no pudo ser actualizado."}
         }
     }
 
@@ -51,7 +51,7 @@ export default class Producto {
             await this.mongodb(this.url);
             return await ProductoModel.findByIdAndDelete(id);
         } catch (err) {
-            console.log(err);
+            return {error: "El producto no pudo ser eliminado."}
         }
     }
 }

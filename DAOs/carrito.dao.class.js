@@ -14,7 +14,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.findById(id);
         } catch (err) {
-            console.log(err);
+            return {error: "No existe el carrito."}
         }
     }
 
@@ -23,7 +23,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.find();
         } catch (err) {
-            console.log(err);
+            return {error: "No existen carritos."}
         }
     }
 
@@ -33,7 +33,7 @@ export default class Carrito {
             const newCarrito = new CarritoModel();
             return await newCarrito.save();
         } catch (err) {
-            console.log(err);
+            return {error: "El carrito no pudo ser creado."}
         }
     }
 
@@ -56,11 +56,11 @@ export default class Carrito {
             return await CarritoModel.findOneAndUpdate(filter, update, options);
             } else {
             carr.productos.push({ producto: product.id, stock: product.stock });
-            let result = await CarritoModel.findByIdAndUpdate(idCarrito, carr);
+            let result = await CarritoModel.findByIdAndUpdate(idCarrito, carr, { new: true });
             return result;
             }
         } catch (err) {
-            console.log(err);
+            return {error: "El producto no pudo ser creado en el carrito."}
         }
     }
 
@@ -69,7 +69,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.findByIdAndDelete(id)
         } catch (err) {
-            console.log(err);
+            return {error: "El carrito no pudo ser eliminado."}
         }
     }
 
@@ -87,13 +87,10 @@ export default class Carrito {
             $pull: {
                 productos: { _id: existingProd._id },
             },
-            });
+            }, { new: true });
         } catch (err) {
-            console.log(err);
+            return {error: "El producto no pudo ser eliminado del carrito."}
         }
-        const productosCarrito = this.carritos.find((carr) => carr.id == idCarrito);
-        let index = productosCarrito.productos.findIndex((prod) => prod.id == idPrd);
-        return productosCarrito.productos.splice(index, 1);
     }
 
 }
