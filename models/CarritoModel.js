@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const carritoSchema = new mongoose.Schema({
     productos: [
         {
-          producto: { type: Array, ref: "producto" },
+          producto: { type: Array},
           stock: Number,
         },
       ],

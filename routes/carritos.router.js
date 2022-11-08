@@ -6,13 +6,21 @@ const router = express.Router();
 const carrito = new Carrito();
 
 router.post("/", async (req, res) => {
-    const carritoCreado = await carrito.crearCarrito();
-    res.send(carritoCreado);
+    try {
+        const carritoCreado = await carrito.crearCarrito();
+        res.send(carritoCreado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.delete("/:id", async (req, res) => {
-    const carritoBorrado = await carrito.borrar(req.params.id);
-    res.send(carritoBorrado);
+    try {
+        const carritoBorrado = await carrito.borrar(req.params.id);
+        res.send(carritoBorrado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.get("/", async (req, res) => {

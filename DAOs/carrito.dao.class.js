@@ -14,7 +14,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.findById(id);
         } catch (err) {
-            return {error: "No existe el carrito."}
+            throw new Error('No existe el carrito.');
         }
     }
 
@@ -23,7 +23,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.find();
         } catch (err) {
-            return {error: "No existen carritos."}
+            throw new Error('No existen carritos.');
         }
     }
 
@@ -33,7 +33,7 @@ export default class Carrito {
             const newCarrito = new CarritoModel();
             return await newCarrito.save();
         } catch (err) {
-            return {error: "El carrito no pudo ser creado."}
+            throw new Error('El carrito no pudo ser creado.');
         }
     }
 
@@ -60,7 +60,7 @@ export default class Carrito {
             return result;
             }
         } catch (err) {
-            return {error: "El producto no pudo ser creado en el carrito."}
+            throw new Error('El producto no pudo ser creado en el carrito.');
         }
     }
 
@@ -69,7 +69,7 @@ export default class Carrito {
             await this.mongodb(this.url);
             return await CarritoModel.findByIdAndDelete(id)
         } catch (err) {
-            return {error: "El carrito no pudo ser eliminado."}
+            throw new Error('El carrito no pudo ser eliminado.');
         }
     }
 
@@ -89,7 +89,7 @@ export default class Carrito {
             },
             }, { new: true });
         } catch (err) {
-            return {error: "El producto no pudo ser eliminado del carrito."}
+            throw new Error('El producto no pudo ser eliminado del carrito.');
         }
     }
 
