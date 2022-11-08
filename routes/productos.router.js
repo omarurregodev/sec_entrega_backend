@@ -13,30 +13,48 @@ function validarAdmin(req, res, next) {
 }
 
 router.post("/", validarAdmin, async (req, res) => {
-    console.log(req.body);
-    const productoCreado = await producto.guardar(req.body);
-    res.send(productoCreado);
+    try {
+        const productoCreado = await producto.guardar(req.body);
+        res.send(productoCreado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.delete("/:id", validarAdmin, async (req, res) => {
-    const productoBorrado = await producto.borrar(req.params.id);
-    res.send(productoBorrado);
+    try {
+        const productoBorrado = await producto.borrar(req.params.id);
+        res.send(productoBorrado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.get("/", async (req, res) => {
-    const listaProductos = await producto.listarAll();
-    res.send(listaProductos);
+    try {
+        const listaProductos = await producto.listarAll();
+        res.send(listaProductos);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.get("/:id", async (req, res) => {
-    const productoBuscado = await producto.listar(req.params.id);
-    res.send(productoBuscado);
+    try {
+        const productoBuscado = await producto.listar(req.params.id);
+        res.send(productoBuscado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.put("/:id", validarAdmin, async (req, res) => {
-    console.log(req.body);
-    const productoActualizado = await producto.actualizar(req.body, req.params.id);
-    res.send(productoActualizado);
+    try {
+        const productoActualizado = await producto.actualizar(req.body, req.params.id);
+        res.send(productoActualizado);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 export default router;

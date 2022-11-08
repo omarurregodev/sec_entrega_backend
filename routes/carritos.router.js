@@ -24,29 +24,45 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-    const listaCarritos = await carrito.listarAll();
-    res.send(listaCarritos);
+    try {
+        const listaCarritos = await carrito.listarAll();
+        res.send(listaCarritos);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.get("/:id/productos", async (req, res) => {
-    const listaCarro = await carrito.listar(req.params.id);
-    res.send(listaCarro);
+    try {
+        const listaCarro = await carrito.listar(req.params.id);
+        res.send(listaCarro);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.post("/:id/productos/:idPrd", async (req, res) => {
-    const modCarrito = await carrito.guardarProductoEnCarrito(
-        req.params.idPrd,
-        req.params.id
-    );
-    res.send(modCarrito);
+    try {
+        const modCarrito = await carrito.guardarProductoEnCarrito(
+            req.params.idPrd,
+            req.params.id
+        );
+        res.send(modCarrito);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 });
 
 router.delete("/:id/productos/:idPrd", async (req, res) => {
-    const deleteProdCarrito = await carrito.eliminarProductoEnCarrito(
-        req.params.idPrd,
-        req.params.id
-    );
-    res.send(deleteProdCarrito);
+    try {
+        const deleteProdCarrito = await carrito.eliminarProductoEnCarrito(
+            req.params.idPrd,
+            req.params.id
+        );
+        res.send(deleteProdCarrito);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
 })
 
 export default router;
